@@ -1,0 +1,62 @@
+#include <GL/glut.h>
+#include <stdio.h>
+
+int Xc, Yc, r;
+
+void myInit() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glMatrixMode(GL_PROJECTION);
+	gluOrtho2D(0, 640, 0, 640);
+}
+
+void plot(int x, int y) {
+	glBegin(GL_POINTS);
+	glVertex2i(x+Xc, y+Yc);
+	glVertex2i(x+Xc, -y+Yc);
+	glVertex2i(-x+Xc, -y+Yc);
+	glVertex2i(-x+Xc, y+Yc);
+	glVertex2i(y+Xc, x+Yc);
+	glVertex2i(y+Xc, -x+Yc);
+	glVertex2i(-y+Xc, -x+Yc);
+	glVertex2i(-y+Xc, x+Yc);	
+	glEnd();
+}
+
+void draw_circle(){
+	int x = 0, y = r;
+	int d = 3 -2 *r;
+	plot(x,y);
+	while(x < y){
+		x += 1;
+		if (d < 0)
+			d = d + 2 * x + 1;
+		else {
+			d = d + 2 * (x-y) + 1;
+			y -= 1;
+		}
+		plot(x, y);
+	}
+
+}
+
+void myDisplay() {
+	draw_circle();
+	glFlush();
+}
+
+void main(int argc, char **argv) {
+
+	printf( "Enter Centre of Circle(Xc, Yc) : \n");
+	scanf("%d%d", &Xc, &Yc);
+	printf("Enter Radius of Cirlce : ");
+	scanf("%d", &r);
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutInitWindowSize(640, 640);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("Bresenham's Circle Drawing");
+	myInit();
+	glutDisplayFunc(myDisplay);
+	glutMainLoop();
+}
